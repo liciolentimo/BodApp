@@ -37,6 +37,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.JointType;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -93,7 +94,7 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback,
 
     //Car animation
     private List<LatLng> polyLineList;
-    private Marker pickupLocationMarker;
+    private Marker carMarker;
     private float v;
     private double lat, lng;
     private Handler handler;
@@ -106,6 +107,59 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback,
     private Polyline blackPolyline, greyPolyline;
 
     private IGoogleAPI mService;
+
+    Runnable drawPathRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if(index < polyLineList.size()-1) {
+                index++;
+                next = index + 1;
+            }
+            if(index < polyLineList.size()-1) {
+                startPosition = polyLineList.get(index);
+                endPosition = polyLineList.get(next);
+            }
+            ValueAnimator valueAnimator = ValueAnimator.ofFloat(0,1);
+            valueAnimator.setDuration(3000);
+            valueAnimator.setInterpolator(new LinearInterpolator());
+            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    v = valueAnimator.getAnimatedFraction();
+                    lng = v*endPosition.longitude+(1-v)*startPosition.longitude;
+                    lat = v*endPosition.latitude+(1-v)*startPosition.latitude;
+                    LatLng newPos = new LatLng(lat,lng);
+                    carMarker.setPosition(newPos);
+                    carMarker.setAnchor(0.5f,0.5f);
+                    carMarker.setRotation(getBearing(startPosition,newPos));
+                    mMap.moveCamera(CameraUpdateFactory.newCameraPosition(
+                            new CameraPosition.Builder()
+                            .target(newPos)
+                            .zoom(15.5f)
+                            .build()
+                    ));
+                }
+            });
+        }
+    };
+
+    private float getBearing(LatLng startPosition, LatLng endPosition) {
+        double lat = Math.abs(startPosition.latitude - endPosition.latitude);
+        double lng = Math.abs(startPosition.longitude - endPosition.longitude);
+
+        if(startPosition.latitude < endPosition.latitude && startPosition.longitude < endPosition.longitude)
+            return (float) (Math.toDegrees(Math.atan(lng/lat)));
+
+        else if(startPosition.latitude >= endPosition.latitude && startPosition.longitude < endPosition.longitude)
+            return (float) ((90-Math.toDegrees(Math.atan(lng/lat)))+90);
+
+        else if(startPosition.latitude >= endPosition.latitude && startPosition.longitude >= endPosition.longitude)
+            return (float) (Math.toDegrees(Math.atan(lng/lat))+180);
+
+        else if(startPosition.latitude < endPosition.latitude && startPosition.longitude >= endPosition.longitude)
+            return (float) ((90-Math.toDegrees(Math.atan(lng/lat)))+270);
+        return -1;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +183,8 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback,
                 else {
                     stopLocationUpdates();
                     mCurrent.remove();
+                    mMap.clear();
+                    handler.removeCallbacks(drawPathRunnable);
                     Snackbar.make(mapFragment.getView(),"You are offline",Snackbar.LENGTH_SHORT)
                             .show();
                 }
@@ -169,7 +225,7 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback,
                     "origin="+currentPosition.latitude +","+currentPosition.longitude+"&"+
                     "destination="+destination+"&"+
                     "key="+getResources().getString(R.string.google_direction_api);
-            Log.d("Lentimosystems", requestApi);
+            Log.d("LentimoSystems", requestApi);
             mService.getPath(requestApi)
                     .enqueue(new Callback<String>() {
                         @Override
@@ -227,6 +283,16 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback,
                                     }
                                 });
                                 polyLineAnimator.start();
+
+                                carMarker = mMap.addMarker(new MarkerOptions().position(currentPosition)
+                                .flat(true)
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.bike)));
+
+                                handler = new Handler();
+                                index = -1;
+                                next = 1;
+                                handler.postDelayed(drawPathRunnable,3000);
+
 
 
                             } catch (JSONException e) {
@@ -375,9 +441,9 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback,
                         if(mCurrent != null)
                             mCurrent.remove();
                         mCurrent = mMap.addMarker(new MarkerOptions()
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.bike))
+
                         .position(new LatLng(latitude,longitude))
-                        .title("You"));
+                        .title("Your Location"));
 
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude,longitude),15.0f));
 
