@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">BodApp</string>
+    <string name="title_activity_welcome">Map</string>
+    <string name="google_direction_api">AIzaSyC0hKTG9rcJuqahzELX1-CMVXghBvPz_go</string>
+</resources>

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "2236250329",
+    "firebase_url": "https://bodapp-49110.firebaseio.com",
+    "project_id": "bodapp-49110",
+    "storage_bucket": "bodapp-49110.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:2236250329:android:9f42c372c3a82c36",
+        "android_client_info": {
+          "package_name": "com.lentimosystems.bodapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "2236250329-qfr4h9jqot103d3fmf9hj5r20ob5fomr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lentimosystems.bodapp",
+            "certificate_hash": "3b4a0cd50fea19f83fd1637ed571024a6168a1b9"
+          }
+        },
+        {
+          "client_id": "2236250329-hvnikcjl3981iirsk51a3vntm2mei8fk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBo7BflV0hyRulSXP9QmZJz9YaST2avH3k"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "2236250329-hvnikcjl3981iirsk51a3vntm2mei8fk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
