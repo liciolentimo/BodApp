@@ -199,7 +199,7 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback,
         polyLineList = new ArrayList<>();
 
 
-        places = (PlaceAutocompleteFragment)getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        places = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         places.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
@@ -222,7 +222,7 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback,
 
 
 
-        drivers = FirebaseDatabase.getInstance().getReference("Drivers");
+        drivers = FirebaseDatabase.getInstance().getReference(Common.driver_tbl);
         geoFire = new GeoFire(drivers);
 
         setUpLocation();
