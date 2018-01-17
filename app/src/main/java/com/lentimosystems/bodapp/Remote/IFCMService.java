@@ -1,5 +1,8 @@
 package com.lentimosystems.bodapp.Remote;
 
+import com.lentimosystems.bodapp.Model.FCMResponse;
+import com.lentimosystems.bodapp.Model.Sender;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Header;
@@ -16,5 +19,5 @@ public interface IFCMService {
             "Authorization:key=AAAAAIVKeNk:APA91bFk5fLngVvnoQVBQiOoKdR49K4RbFKkfcuwkpOQ_QE0dPFCp5ldlBQsu7NFEzcyf8_blf3ztxcz_gWSRlqHYYYY7-cAMgqcZOMZsOSzQAHU4BTKybAE5tCbd50CcdwzPgnKM8G3"
     })
     @POST("fcm/send")
-    Call<String>sendMessage(@Body String body);
+    Call<FCMResponse>sendMessage(@Body Sender body);
 }
