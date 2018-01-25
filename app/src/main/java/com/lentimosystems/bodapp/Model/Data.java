@@ -6,14 +6,14 @@ package com.lentimosystems.bodapp.Model;
 
 public class Data {
     public String title;
-    public String detail;
+    public String body;
 
     public Data() {
     }
 
-    public Data(String title, String detail) {
+    public Data(String title, String body) {
         this.title = title;
-        this.detail = detail;
+        this.body = body;
     }
 
     public String getTitle() {
@@ -24,11 +24,11 @@ public class Data {
         this.title = title;
     }
 
-    public String getDetail() {
-        return detail;
+    public String getBody() {
+        return body;
     }
 
-    public void setDetail(String detail) {
-        this.detail = detail;
+    public void setBody(String body) {
+        this.body = body;
     }
 }
