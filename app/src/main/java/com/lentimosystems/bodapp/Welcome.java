@@ -52,9 +52,11 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.SquareCap;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.lentimosystems.bodapp.Common.Common;
 import com.lentimosystems.bodapp.Model.Token;
@@ -115,6 +117,9 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback,
 
     private IGoogleAPI mService;
 
+    //Presense System
+    DatabaseReference onlineRef, currentUserRef;
+
     Runnable drawPathRunnable = new Runnable() {
         @Override
         public void run() {
@@ -173,21 +178,41 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        //Presense system
+        onlineRef = FirebaseDatabase.getInstance().getReference().child(".info/connected");
+        currentUserRef = FirebaseDatabase.getInstance().getReference(Common.driver_tbl)
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        onlineRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                currentUserRef.onDisconnect().removeValue();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         location_switch = (MaterialAnimatedSwitch) findViewById(R.id.location_switch);
         location_switch.setOnCheckedChangeListener(new MaterialAnimatedSwitch.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(boolean IsOnline) {
                 if(IsOnline){
+                    FirebaseDatabase.getInstance().goOnline();
+
                     startLocationUpdates();
                     displayLocation();
                     Snackbar.make(mapFragment.getView(),"You are online",Snackbar.LENGTH_SHORT)
                             .show();
                 }
                 else {
+                    FirebaseDatabase.getInstance().goOffline();
+
                     stopLocationUpdates();
                     mCurrent.remove();
                     mMap.clear();

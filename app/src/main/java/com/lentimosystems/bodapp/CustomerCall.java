@@ -88,9 +88,9 @@ public class CustomerCall extends AppCompatActivity {
                                 JSONObject distance = legsObject.getJSONObject("distance");
                                 txtDistance.setText(distance.getString("text"));
                                 JSONObject time = legsObject.getJSONObject("duration");
-                                txtDistance.setText(time.getString("text"));
+                                txtTime.setText(time.getString("text"));
                                 String address = legsObject.getString("end_address");
-                                txtDistance.setText(address);
+                                txtAddress.setText(address);
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
