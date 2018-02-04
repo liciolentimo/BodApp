@@ -3,4 +3,5 @@
     <string name="title_activity_welcome">Map</string>
     <!--<string name="google_direction_api">AIzaSyC0hKTG9rcJuqahzELX1-CMVXghBvPz_go </string> -->
     <string name="google_direction_api">AIzaSyAMtnZqH8R7-v0XVhtfOgZUW2ex5rvAido</string>
+    <string name="title_activity_driver_tracking">Map</string>
 </resources>
