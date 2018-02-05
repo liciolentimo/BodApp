@@ -2,6 +2,7 @@ package com.lentimosystems.bodapp.Common;
 
 import android.location.Location;
 
+import com.lentimosystems.bodapp.Model.User;
 import com.lentimosystems.bodapp.Remote.FCMClient;
 import com.lentimosystems.bodapp.Remote.IFCMService;
 import com.lentimosystems.bodapp.Remote.IGoogleAPI;
@@ -19,6 +20,8 @@ public class Common {
     public static final String user_rider_tbl = "RidersInformation";
     public static final String pickup_request_tbl = "PickupRequest";
     public static final String token_tbl = "Tokens";
+
+    public static User currentUser;
 
     public static Location mLastLocation = null;
 
